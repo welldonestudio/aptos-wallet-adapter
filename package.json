@@ -1,8 +1,8 @@
 {
-  "name": "wallet-adapter-plugin-template",
+  "name": "@welldonestudio/aptos-wallet-adapter",
   "version": "0.1.0",
-  "description": "Petra plugin to use with Aptos Wallet Adapter",
-  "author": "Petra Aptos",
+  "description": "WELLDONE Wallet plugin to use with Aptos Wallet Adapter",
+  "author": "WELLDONE Studio",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -27,5 +27,17 @@
     "ts-jest": "^29.0.3",
     "tsup": "^6.5.0",
     "typescript": "^4.9.3"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/welldonestudio/wallet-adapter-plugin.git"
+  },
+  "keywords": [
+    "aptos",
+    "wallet"
+  ],
+  "bugs": {
+    "url": "https://github.com/welldonestudio/wallet-adapter-plugin/issues"
+  },
+  "homepage": "https://github.com/welldonestudio/wallet-adapter-plugin#readme"
 }
