@@ -61,7 +61,8 @@ export class WelldonePluginProvider implements PluginProvider {
     try {
       const rawTx = await new AptosClient(this.aptosNodeUrl(this._networkId)).generateTransaction(
         this._account.address,
-        transaction
+        transaction,
+        options
       );
       const rawTxnWithSalt = `0x${Buffer.concat([
         Buffer.from(sha3_256(Buffer.from('APTOS::RawTransaction', 'ascii')), 'hex'),
