@@ -30,14 +30,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/welldonestudio/wallet-adapter-plugin.git"
+    "url": "git+https://github.com/welldonestudio/aptos-wallet-adapter.git"
   },
   "keywords": [
     "aptos",
     "wallet"
   ],
   "bugs": {
-    "url": "https://github.com/welldonestudio/wallet-adapter-plugin/issues"
+    "url": "https://github.com/welldonestudio/aptos-wallet-adapter/issues"
   },
-  "homepage": "https://github.com/welldonestudio/wallet-adapter-plugin#readme"
+  "homepage": "https://github.com/welldonestudio/aptos-wallet-adapter#readme"
 }
