@@ -4,12 +4,12 @@ WELLDONE Wallet adapter plugin for use with [Aptos Wallet Adapter](https://githu
 
 ## Install with npm
 ```
-npm i @welldone/wallet-adapter-plugin
+npm i @welldonestudio/aptos-wallet-adapter
 ```
 
 ## Install with yarn
 ```
-yarn add @welldone/wallet-adapter-plugin
+yarn add @welldonestudio/aptos-wallet-adapter
 ```
 
 ---

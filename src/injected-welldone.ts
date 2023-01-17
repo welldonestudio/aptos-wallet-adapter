@@ -7,6 +7,9 @@ import {
   SignMessageResponse
 } from '@aptos-labs/wallet-adapter-core';
 import { AptosClient, BCS } from 'aptos';
+import type { ApiRequestOptions } from 'aptos/src/generated/core/ApiRequestOptions';
+import type { CancelablePromise } from 'aptos/src/generated/core/CancelablePromise';
+import type { IndexResponse } from 'aptos/src/generated/models/IndexResponse';
 import { sha3_256 } from 'js-sha3';
 
 interface WelldoneProvider {
@@ -150,14 +153,11 @@ export class WelldonePluginProvider implements PluginProvider {
   }
 
   async network() {
-    const response = await window.dapp.request('aptos', {
+    const response = await this.request<IndexResponse>({
       method: 'GET',
-      params: [
-        {
-          url: '/'
-        }
-      ]
+      url: '/',
     });
+
     this._networkId = response.chain_id;
     switch (this._networkId) {
       case 1:
@@ -197,5 +197,13 @@ export class WelldonePluginProvider implements PluginProvider {
       default:
         return 'https://fullnode.devnet.aptoslabs.com/v1';
     }
+  }
+
+  async request<T>(options: ApiRequestOptions): CancelablePromise<T> {
+    const response = await window.dapp.request('aptos', {
+        method: options.method,
+        params: [options]
+    })
+    return response;
   }
 }
