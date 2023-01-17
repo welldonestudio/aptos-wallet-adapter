@@ -62,7 +62,8 @@ export class WelldonePluginProvider implements PluginProvider {
       throw new Error('Network Error: Not connected to the network');
     }
     try {
-      const rawTx = await new AptosClient(this.aptosNodeUrl(this._networkId)).generateTransaction(
+      const client = new AptosClient(this.aptosNodeUrl(this._networkId));
+      const rawTx = await client.generateTransaction(
         this._account.address,
         transaction,
         options
