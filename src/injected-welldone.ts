@@ -8,9 +8,9 @@ import {
 } from '@aptos-labs/wallet-adapter-core';
 import { AptosClient, BCS } from 'aptos';
 import type { ApiRequestOptions } from 'aptos/src/generated/core/ApiRequestOptions';
-import type { CancelablePromise } from 'aptos/src/generated/core/CancelablePromise';
+import { CancelablePromise } from './utils/CancelablePromise';
 import type { IndexResponse } from 'aptos/src/generated/models/IndexResponse';
-import { sha3_256 } from 'js-sha3';
+import { sha3_256 as sha3Hash } from "@noble/hashes/sha3";
 
 interface WelldoneProvider {
   request: (chain: string, args: any) => Promise<any>;
@@ -68,8 +68,11 @@ export class WelldonePluginProvider implements PluginProvider {
         transaction,
         options
       );
+
+      const hash = sha3Hash.create();
+      hash.update('APTOS::RawTransaction');
       const rawTxnWithSalt = `0x${Buffer.concat([
-        Buffer.from(sha3_256(Buffer.from('APTOS::RawTransaction', 'ascii')), 'hex'),
+        Buffer.from(hash.digest()),
         Buffer.from(BCS.bcsToBytes(rawTx))
       ]).toString('hex')}`;
 
@@ -200,11 +203,19 @@ export class WelldonePluginProvider implements PluginProvider {
     }
   }
 
-  async request<T>(options: ApiRequestOptions): CancelablePromise<T> {
-    const response = await window.dapp.request('aptos', {
-        method: options.method,
-        params: [options]
+  request<T>(options: ApiRequestOptions): CancelablePromise<T> {
+    return new CancelablePromise(async (resolve, reject, onCancel) => {
+      try {
+        if (!onCancel.isCancelled) {
+          const response = await window.dapp.request('aptos', {
+            method: options.method,
+            params: [options]
+        });
+          resolve(response);
+        }
+      } catch (error) {
+        reject(error);
+      }
     })
-    return response;
   }
 }
