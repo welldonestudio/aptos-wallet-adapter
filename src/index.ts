@@ -134,7 +134,7 @@ export class WelldoneWallet implements AdapterPlugin {
         networkName: NetworkInfo;
       }): Promise<void> => {
         callback({
-          name: newNetwork.networkName,
+          name: newNetwork.networkName.name,
           chainId: undefined,
           api: undefined,
         });

@@ -186,7 +186,6 @@ export class WelldonePluginProvider implements PluginProvider {
           name: networkName
         }
       };
-      console.log('dapp:chainChanged > ', newNetwork, network);
       listener(network);
     });
   }
