@@ -168,7 +168,6 @@ export class WelldonePluginProvider implements PluginProvider {
         return 'mainnet' as NetworkName;
       case 2:
         return 'testnet' as NetworkName;
-      case 42:
       default:
         return 'devnet' as NetworkName;
     }
@@ -179,13 +178,14 @@ export class WelldonePluginProvider implements PluginProvider {
   }
 
   async onNetworkChange(listener: (network: { networkName: NetworkInfo }) => Promise<void>) {
-    window.dapp.on('dapp:chainChanged', (newNetwork: string) => {
+    window.dapp.on('dapp:chainChanged', async (newNetwork: string) => {
       const networkName = newNetwork.split(':')[1] as NetworkName;
       const network = {
         networkName: {
           name: networkName
         }
       };
+      await this.network();
       listener(network);
     });
   }
@@ -196,7 +196,6 @@ export class WelldonePluginProvider implements PluginProvider {
         return 'https://fullnode.mainnet.aptoslabs.com/v1';
       case 2:
         return 'https://fullnode.testnet.aptoslabs.com/v1';
-      case 42:
       default:
         return 'https://fullnode.devnet.aptoslabs.com/v1';
     }
