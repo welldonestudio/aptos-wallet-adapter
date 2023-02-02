@@ -34,7 +34,7 @@ export class WelldonePluginProvider implements PluginProvider {
       });
       const accountInfo = {
         address: account['aptos'].address,
-        publicKey: account['aptos'].publicKey
+        publicKey: account['aptos'].pubKey,
       };
       this._account = accountInfo;
       return accountInfo;
