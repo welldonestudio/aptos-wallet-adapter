@@ -1,6 +1,6 @@
 # WELLDONE wallet plugin for interacting with the Aptos Wallet Adapter
 
-WELLDONE Wallet adapter plugin for use with [Aptos Wallet Adapter](https://github.com/aptos-labs/aptos-wallet-adapter).
+WELLDONE Wallet adapter plugin for use with [wallet standard](https://aptos.dev/standards/wallets).
 
 ## Install with npm
 ```
@@ -11,8 +11,6 @@ npm i @welldone-studio/aptos-wallet-adapter
 ```
 yarn add @welldone-studio/aptos-wallet-adapter
 ```
-
----
 
 ### Links
 * [WELLDONE Wallet](https://chrome.google.com/webstore/detail/welldone-wallet-for-multi/bmkakpenjmcpfhhjadflneinmhboecjf)
