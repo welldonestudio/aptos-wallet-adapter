@@ -4,13 +4,13 @@ import {
   NetworkName,
   PluginProvider,
   SignMessagePayload,
-  SignMessageResponse
+  SignMessageResponse,
 } from '@aptos-labs/wallet-adapter-core';
-import { AptosClient, BCS } from 'aptos';
+import { sha3_256 as sha3Hash } from "@noble/hashes/sha3";
+import { AptosClient, BCS, HexString } from 'aptos';
 import type { ApiRequestOptions } from 'aptos/src/generated/core/ApiRequestOptions';
 import { CancelablePromise } from './utils/CancelablePromise';
 import type { IndexResponse } from 'aptos/src/generated/models/IndexResponse';
-import { sha3_256 as sha3Hash } from "@noble/hashes/sha3";
 
 interface WelldoneProvider {
   request: (chain: string, args: any) => Promise<any>;
@@ -71,14 +71,10 @@ export class WelldonePluginProvider implements PluginProvider {
 
       const hash = sha3Hash.create();
       hash.update('APTOS::RawTransaction');
-      const rawTxnWithSalt = `0x${Buffer.concat([
-        Buffer.from(hash.digest()),
-        Buffer.from(BCS.bcsToBytes(rawTx))
-      ]).toString('hex')}`;
-
+      const rawTxnWithSalt = HexString.fromUint8Array(new Uint8Array([...hash.digest(), ...BCS.bcsToBytes(rawTx)])).hex();
       const txHash = await window.dapp.request('aptos', {
         method: 'dapp:signAndSendTransaction',
-        params: [`${rawTxnWithSalt}`]
+        params: [rawTxnWithSalt]
       });
 
       return { hash: txHash[0] };
@@ -87,33 +83,35 @@ export class WelldonePluginProvider implements PluginProvider {
     }
   }
 
+  /*
   // TODO: signTransaction
-  //   async signTransaction(transaction: any, options?: any) {
-  //     if (!this._account) {
-  //       throw new Error('Account Error: No Account');
-  //     }
-  //     if (!this._networkId) {
-  //       throw new Error('Network Error: Not connected to the network');
-  //     }
-  //     try {
-  //       const rawTx = await new AptosClient(this.aptosNodeUrl(this._networkId)).generateTransaction(
-  //         this._account.address,
-  //         transaction
-  //       );
-  //       const rawTxnWithSalt = `0x${Buffer.concat([
-  //         Buffer.from(sha3_256(Buffer.from('APTOS::RawTransaction', 'ascii')), 'hex'),
-  //         Buffer.from(BCS.bcsToBytes(rawTx))
-  //       ]).toString('hex')}`;
+  async signTransaction(transaction: any, options?: any) {
+    if (!this._account) {
+      throw new Error('Account Error: No Account');
+    }
+    if (!this._networkId) {
+      throw new Error('Network Error: Not connected to the network');
+    }
+    try {
+      const rawTx = await new AptosClient(this.aptosNodeUrl(this._networkId)).generateTransaction(
+        this._account.address,
+        transaction
+      );
 
-  //       const response = await window.dapp.request('aptos', {
-  //         method: 'dapp:signTransaction',
-  //         params: [`${rawTxnWithSalt}`]
-  //       });
-  //       return Buffer.from(response[0].signature, 'hex');
-  //     } catch (error) {
-  //       throw error;
-  //     }
-  //   }
+      const hash = sha3Hash.create();
+      hash.update('APTOS::RawTransaction');
+      const rawTxnWithSalt = HexString.fromUint8Array(new Uint8Array([...hash.digest(), ...BCS.bcsToBytes(rawTx)])).hex();
+      const response = await window.dapp.request('aptos', {
+        method: 'dapp:signTransaction',
+        params: [rawTxnWithSalt]
+      });
+      const hexString = new HexString(response[0].signature);
+      return hexString.toUint8Array();
+    } catch (error) {
+      throw error;
+    }
+  }
+  */
 
   async signMessage(message: SignMessagePayload) {
     if (!this._account) {
