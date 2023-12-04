@@ -8,7 +8,6 @@ import {
 } from '@aptos-labs/wallet-adapter-core';
 import { sha3_256 as sha3Hash } from "@noble/hashes/sha3";
 import { AptosClient, BCS, HexString } from 'aptos';
-import type { ApiRequestOptions } from 'aptos/src/generated/core/ApiRequestOptions';
 import { CancelablePromise } from './utils/CancelablePromise';
 import type { IndexResponse } from 'aptos/src/generated/models/IndexResponse';
 
@@ -199,7 +198,7 @@ export class WelldonePluginProvider implements PluginProvider {
     }
   }
 
-  request<T>(options: ApiRequestOptions): CancelablePromise<T> {
+  request<T>(options: any): CancelablePromise<T> {
     return new CancelablePromise(async (resolve, reject, onCancel) => {
       try {
         if (!onCancel.isCancelled) {
